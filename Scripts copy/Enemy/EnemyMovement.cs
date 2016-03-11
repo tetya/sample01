@@ -4,7 +4,7 @@ using System.Collections;
 public class EnemyMovement : MonoBehaviour { 
 
 	public float slowSpeed;
-	public Transform player;
+	private GameObject player;
 	private NavMeshAgent nav;
 	private Animator animator;
 	private int currentPath=0;
@@ -17,6 +17,8 @@ public class EnemyMovement : MonoBehaviour {
 		//HierarchyからGameOverManagerを見つけて代入
 		GameObject manager = GameObject.FindWithTag("Manager");
 		gameOverManager = manager.GetComponent<GameOverManager>();
+		//HierarchyからPlayerを見つけて代入
+		player = GameObject.FindWithTag("Player");
 		//コンポーネントの取得
 		nav = GetComponent <NavMeshAgent> ();
 		animator = GetComponent <Animator> ();
@@ -30,9 +32,9 @@ public class EnemyMovement : MonoBehaviour {
 			return;
 		}
 		//常にプレイヤーを向かせる
-		transform.LookAt(player.position);
+		transform.LookAt(player.transform.position);
 		//目的地の更新（Playerの現在の位置）
-		nav.SetDestination (player.position);
+		nav.SetDestination (player.transform.position);
 		//アニメーターに現在の速度を渡す
 		animator.SetFloat("Speed", nav.velocity.magnitude);//<! 値が荒ぶるのでsqrMagnitudeを使えず
 		//アニメーション中の挙動

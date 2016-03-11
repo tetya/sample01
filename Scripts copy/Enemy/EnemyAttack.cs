@@ -10,7 +10,7 @@ public class EnemyAttack : MonoBehaviour {
 	public AudioSource soundShoot;
 	public GameObject bulletPrefab;
 	public GameObject hand;
-	public Transform targetCenterPos;
+	private Transform tarCenTra;
 	private float intervalCounter = 0;
 	private Animator animator;
 	private GameOverManager gameOverManager;
@@ -20,6 +20,9 @@ public class EnemyAttack : MonoBehaviour {
 		//HierarchyからGameOverManagerを見つけて代入
 		GameObject manager = GameObject.FindWithTag("Manager");
 		gameOverManager = manager.GetComponent<GameOverManager>();
+		//HierarchyからPlayerを見つけて代入
+		GameObject player = GameObject.FindWithTag("Player");
+		tarCenTra = player.transform.Find ("CenterPosition");//<! オブジェクト名
 		//アニメーターの取得
 		animator = GetComponent<Animator>();
 	}
@@ -93,7 +96,7 @@ public class EnemyAttack : MonoBehaviour {
 		//効果音
 		soundShoot.Play ();
 		//発射座標から目標座標への回転ベクトルを作成
-		Vector3 direction = targetCenterPos.position - hand.transform.position;
+		Vector3 direction = tarCenTra.position - hand.transform.position;
 		Quaternion rotation = Quaternion.LookRotation(direction);
 		//オブジェクトの生成
 		GameObject bullet = Instantiate (bulletPrefab, hand.transform.position, rotation) as GameObject;//<! 情報を渡したいのでインスタンス化
