@@ -1,16 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ClockBehaviour : MonoBehaviour {
+public class ItemBehaviour : MonoBehaviour {
 
-	private float recoverablTime = 15f;
 	private SpawnManager spawn; //<! SpawnManagerで設定
-	private TimeManager timeManager;
+	protected GameObject manager;
 
-	void Start(){
+	// 派生先で処理を拡張する
+	protected virtual void Start () {
 		//HierarchyからScoreManagerを見つけ、管理クラスをlifeManagerに代入
-		GameObject manager = GameObject.FindWithTag("Manager");
-		timeManager = manager.GetComponent<TimeManager>();
+		manager = GameObject.FindWithTag("Manager");
 	}
 
 	// Update is called once per frame
@@ -24,19 +23,18 @@ public class ClockBehaviour : MonoBehaviour {
 		spawn = spaMan;
 	}
 
-
 	void OnTriggerEnter(Collider other){
 		//Playerタグを持っているか確認
 		if(other.tag == "Player"){
-			GetClock ();
+			GetItem ();
 		}
 	}
 
-	void GetClock(){
+	protected virtual void GetItem(){
 		//対応するスポーンのカウンターを減らす
 		spawn.counter--;
-		//スコアの処理
-		timeManager.ExtendTimeLimit(recoverablTime);
+		//SEを鳴らす
+		spawn.PlaySE();
 		//このオブジェクトを破壊
 		Destroy (gameObject);
 	}
